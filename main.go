@@ -72,11 +72,11 @@ func checkSudo() {
 	}
 }
 
-func restartApache() {
-	cmd := exec.Command("/etc/init.d/httpd", "restart")
+func reloadApache() {
+	cmd := exec.Command("/etc/init.d/httpd", "reload")
 	out, err := cmd.CombinedOutput()
 	if err != nil {
-		log.Fatal("Could not restart apache\n" + string(out))
+		log.Fatal("Could not reload apache\n" + string(out))
 	}
 }
 
@@ -113,7 +113,7 @@ func commandEnPHP() {
 	}
 
 	conf.Write()
-	restartApache()
+	reloadApache()
 }
 
 func commandDisPHP() {
@@ -123,7 +123,7 @@ func commandDisPHP() {
 	conf.PHPEnabled = false
 
 	conf.Write()
-	restartApache()
+	reloadApache()
 }
 
 func commandPHPName() {
@@ -138,7 +138,7 @@ func commandPHPName() {
 
 	conf.Write()
 	if conf.PHPEnabled {
-		restartApache()
+		reloadApache()
 	}
 }
 
