@@ -1,7 +1,9 @@
 # appdyn
 AppDynamics Agent utility
 
-appdyn is a command-line utility to enable and disable app-dynamic agents
+`appdyn` is a command-line utility to enable and disable app-dynamic agents.
+
+
 Example commands:
 ```
 appdyn help
