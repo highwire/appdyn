@@ -21,6 +21,12 @@ var (
 )
 
 func NewADConfigFromEnvironment() *ADConfig {
+	// If the file does not exist, it's the equivilent of everything being disabled.
+	if _, err := os.Stat(phpConfigPath); os.IsNotExist(err) {
+		return new(ADConfig)
+	}
+
+	// Load the config
 	phpConfig, err := ini.LoadFile(phpConfigPath)
 	if err != nil {
 		log.Fatal(err)
@@ -57,7 +63,18 @@ func (conf *ADConfig) Write() {
 
 	fileInfo, err := os.Stat(phpConfigPath)
 	if err != nil {
-		log.Fatal(err)
+		if os.IsNotExist(err) {
+			file, err := os.Create(phpConfigPath)
+			if err != nil {
+				log.Fatal(err)
+			}
+			fileInfo, err = file.Stat()
+			if err != nil {
+				log.Fatal(err)
+			}
+		} else {
+			log.Fatal(err)
+		}
 	}
 	err = ioutil.WriteFile(phpConfigPath, []byte(phpConfig), fileInfo.Mode())
 	if err != nil {
